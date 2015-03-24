@@ -43,7 +43,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		'vendor/hogan-3.0.2.js',
 		'vendor/HTMLPasteurizer.js',
 		'vendor/konami.js',
-		'vendor/mediacrush.js',
+		'vendor/imgrush.js',
 		'vendor/snuownd.js',
 		'core/migrate.js',
 		'core/storage.js',
@@ -104,6 +104,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		'modules/quickMessage.js',
 
 		'modules/hosts/imgur.js',
+		'modules/hosts/futurism.js',
 		'modules/hosts/gfycat.js',
 		'modules/hosts/gifyoutube.js',
 		'modules/hosts/vidble.js',
@@ -120,7 +121,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		'modules/hosts/tumblr.js',
 		'modules/hosts/memecrunch.js',
 		'modules/hosts/imgflip.js',
-		'modules/hosts/mediacrush.js',
+		'modules/hosts/imgrush.js',
 		'modules/hosts/livememe.js',
 		'modules/hosts/makeameme.js',
 		'modules/hosts/memegen.js',
@@ -135,6 +136,9 @@ window.addEventListener('DOMContentLoaded', function() {
 		'modules/hosts/giphy.js',
 		'modules/hosts/streamable.js',
 		'modules/hosts/raddit.js',
+		'modules/hosts/pastebin.js',
+		'modules/hosts/github.js',
+		'modules/hosts/onedrive.js',
 
 		'core/init.js',
 

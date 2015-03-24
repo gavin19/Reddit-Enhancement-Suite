@@ -48,7 +48,7 @@
 				<string>core/storage.js</string>
 				<string>core/template.js</string>
 				<string>vendor/konami.js</string>
-				<string>vendor/mediacrush.js</string>
+				<string>vendor/imgrush.js</string>
 				<string>vendor/gfycat.js</string>
 				<string>vendor/gifyoutube.js</string>
 				<string>vendor/imgurgifv.js</string>
@@ -108,6 +108,7 @@
 				<string>modules/modhelper.js</string>
 				<string>modules/quickMessage.js</string>
 				<string>modules/hosts/imgur.js</string>
+				<string>modules/hosts/futurism.js</string>
 				<string>modules/hosts/gfycat.js</string>
 				<string>modules/hosts/gifyoutube.js</string>
 				<string>modules/hosts/vidble.js</string>
@@ -124,7 +125,7 @@
 				<string>modules/hosts/tumblr.js</string>
 				<string>modules/hosts/memecrunch.js</string>
 				<string>modules/hosts/imgflip.js</string>
-				<string>modules/hosts/mediacrush.js</string>
+				<string>modules/hosts/imgrush.js</string>
 				<string>modules/hosts/livememe.js</string>
 				<string>modules/hosts/makeameme.js</string>
 				<string>modules/hosts/memegen.js</string>
@@ -139,6 +140,9 @@
 				<string>modules/hosts/giphy.js</string>
 				<string>modules/hosts/streamable.js</string>
 				<string>modules/hosts/raddit.js</string>
+				<string>modules/hosts/pastebin.js</string>
+				<string>modules/hosts/github.js</string>
+				<string>modules/hosts/onedrive.js</string>
 				<string>core/init.js</string>
 			</array>
 		</dict>
