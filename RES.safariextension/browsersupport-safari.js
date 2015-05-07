@@ -13,13 +13,6 @@ function safariMessageHandler(msgEvent) {
 			if (typeof request.forceUpdate !== 'undefined') forceUpdate = true;
 			RESUtils.compareVersion(request, forceUpdate);
 			break;
-		case 'loadTweet':
-			var tweet = request;
-			var thisExpando = modules['styleTweaks'].tweetExpando;
-			$(thisExpando).html(tweet.html);
-			thisExpando.style.display = 'block';
-			thisExpando.classList.add('twitterLoaded');
-			break;
 		case 'getLocalStorage':
 			// Does RESStorage have actual data in it?  If it doesn't, they're a legacy user, we need to copy
 			// old schol localStorage from the foreground page to the background page to keep their settings...
@@ -139,21 +132,20 @@ RESUtils.runtime.sanitizeJSON = function(data) {
 	return data;
 };
 
+RESLoadResourceAsText = function(filename, callback) {
+	var url = safari.extension.baseURI + filename;
+
+	RESUtils.runtime.ajax({
+		method: 'GET',
+		url: url,
+		onload: function (response) {
+			callback(response.responseText);
+		}
+	});
+};
 
 RESUtils.runtime.storageSetup = function(thisJSON) {
 	var setupInterval;
-	RESLoadResourceAsText = function(filename, callback) {
-		var url = safari.extension.baseURI + filename;
-
-		RESUtils.runtime.ajax({
-			method: 'GET',
-			url: url,
-			onload: function (response) {
-				callback(response.responseText);
-			}
-		});
-	};
-
 	// we've got safari, get localStorage from background process
 	var setupCallback = function() {
 		if (!document.head) {

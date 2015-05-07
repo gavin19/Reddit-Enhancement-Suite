@@ -125,7 +125,7 @@ tabs.on('activate', function() {
 function getActiveWorker() {
 	let tab = tabs.activeTab;
 	for (let i in workers) {
-		if ((typeof workers[i].tab !== 'undefined') && (tab.title === workers[i].tab.title)) {
+		if (workers[i] && workers[i].tab && (tab.title === workers[i].tab.title)) {
 			return workers[i];
 		}
 	}
@@ -175,6 +175,12 @@ pageMod.PageMod({
 		self.data.url('modules/userTagger.js'),
 		self.data.url('modules/keyboardNav.js'),
 		self.data.url('modules/commandLine.js'),
+		self.data.url('modules/easterEgg.js'),
+		self.data.url('modules/pageNavigator.js'),
+		self.data.url('modules/userInfo.js'),
+		self.data.url('modules/presets.js'),
+		self.data.url('modules/onboarding.js'),
+		self.data.url('modules/customToggles.js'),
 		self.data.url('modules/floater.js'),
 		self.data.url('modules/orangered.js'),
 		self.data.url('modules/announcements.js'),
@@ -199,6 +205,7 @@ pageMod.PageMod({
 		self.data.url('modules/userHighlight.js'),
 		self.data.url('modules/nightMode.js'),
 		self.data.url('modules/styleTweaks.js'),
+		self.data.url('modules/stylesheet.js'),
 		self.data.url('modules/userbarHider.js'),
 		self.data.url('modules/accountSwitcher.js'),
 		self.data.url('modules/filteReddit.js'),
@@ -225,6 +232,7 @@ pageMod.PageMod({
 		self.data.url('modules/modhelper.js'),
 		self.data.url('modules/quickMessage.js'),
 		self.data.url('modules/hosts/imgur.js'),
+		self.data.url('modules/hosts/twitter.js'),
 		self.data.url('modules/hosts/futurism.js'),
 		self.data.url('modules/hosts/gfycat.js'),
 		self.data.url('modules/hosts/gifyoutube.js'),
@@ -385,21 +393,6 @@ pageMod.PageMod({
 					openTab({url: thisLinkURL, inBackground: inBackground, isPrivate: isPrivate });
 					worker.postMessage({status: 'success'});
 					break;
-				case 'loadTweet':
-					Request({
-						url: request.url,
-						onComplete: function(response) {
-							let resp = JSON.parse(response.text);
-							let responseObj = {
-								requestType: 'loadTweet',
-								response: resp
-							};
-							worker.postMessage(responseObj);
-						},
-						headers: request.headers,
-						content: request.data
-					}).get();
-					break;
 				case 'getLocalStorage':
 					worker.postMessage({ requestType: 'getLocalStorage', message: localStorage });
 					break;
@@ -510,8 +503,11 @@ pageMod.PageMod({
 					});
 					break;
 				case 'multicast':
+					isPrivate = priv.isPrivate(worker)
 					workers
-						.filter(function(w) { return w !== worker; })
+						.filter(function(w) {
+							return (w !== worker) && (priv.isPrivate(w) === isPrivate);
+						})
 						.forEach(function(worker) {
 							worker.postMessage(request);
 						});

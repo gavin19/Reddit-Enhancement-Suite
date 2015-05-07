@@ -12,13 +12,6 @@ function operaMessageHandler(msgEvent) {
 			if (typeof eventData.data.forceUpdate !== 'undefined') forceUpdate = true;
 			RESUtils.compareVersion(eventData.data, forceUpdate);
 			break;
-		case 'loadTweet':
-			var tweet = eventData.data;
-			var thisExpando = modules['styleTweaks'].tweetExpando;
-			$(thisExpando).html(tweet.html);
-			thisExpando.style.display = 'block';
-			thisExpando.classList.add('twitterLoaded');
-			break;
 		case 'getLocalStorage':
 			// Does RESStorage have actual data in it?  If it doesn't, they're a legacy user, we need to copy
 			// old schol localStorage from the foreground page to the background page to keep their settings...
@@ -146,17 +139,16 @@ function operaForcedUpdateCallback(obj) {
 	RESUtils.compareVersion(obj, true);
 }
 
+RESLoadResourceAsText = function(filename, callback) {
+	var f = opera.extension.getFile('/' + filename);
+	var fr = new FileReader();
+	fr.onload = function() {
+		callback(fr.result);
+	};
+	fr.readAsText(f);
+};
 
 RESUtils.runtime.storageSetup = function(thisJSON) {
-	RESLoadResourceAsText = function(filename, callback) {
-		var f = opera.extension.getFile('/' + filename);
-		var fr = new FileReader();
-		fr.onload = function() {
-			callback(fr.result);
-		};
-		fr.readAsText(f);
-	};
-
 	opera.extension.addEventListener('message', operaMessageHandler, false);
 	// We're already loaded, call the handler immediately
 	opera.extension.postMessage(JSON.stringify(thisJSON));

@@ -194,19 +194,6 @@ chrome.runtime.onMessage.addListener(
 				xhr.send();
 				return true;
 				break;
-			case 'loadTweet':
-				xhr = new XMLHttpRequest();
-				xhr.open('GET', request.url, true);
-				xhr.onreadystatechange = function() {
-					if (xhr.readyState === 4) {
-						// JSON.parse does not evaluate the attacker's scripts.
-						var resp = JSON.parse(xhr.responseText);
-						sendResponse(resp);
-					}
-				};
-				xhr.send();
-				return true;
-				break;
 			case 'getLocalStorage':
 				sendResponse(localStorage);
 				break;
@@ -305,8 +292,10 @@ chrome.runtime.onMessage.addListener(
 				var tabs = chrome.tabs.query({
 					status: 'complete',
 				}, function(tabs) {
+					var incognito = sender.tab.incognito;
 					tabs = tabs.filter(function(tab) {
-						return (sender.tab.id !== tab.id);
+						return (sender.tab.id !== tab.id) &&
+							(incognito === tab.incognito);
 					});
 
 					tabs.forEach(function(tab) {
