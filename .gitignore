@@ -1,6 +1,5 @@
 ## General
-/node_modules
-/deprecated
+node_modules/
 
 # Browser extensions and certs
 *.crx
@@ -12,41 +11,7 @@
 *.zip
 
 # Copied files
-dist/
-/Chrome/*.js
-/Chrome/*.css
-/Chrome/templates.html
-!/Chrome/background.js
-/Chrome/core/*
-/Chrome/modules/*
-/Chrome/vendor/*
-/OperaBlink/*.js
-/OperaBlink/*.css
-/OperaBlink/templates.html
-!/OperaBlink/background.js
-/OperaBlink/core/*
-/OperaBlink/modules/*
-/OperaBlink/vendor/*
-/RES.safariextension/*.js
-/RES.safariextension/*.css
-/RES.safariextension/templates.html
-/RES.safariextension/core/*
-/RES.safariextension/modules/*
-/RES.safariextension/vendor/*
-/Opera/*.js
-/Opera/*.css
-/Opera/templates.html
-!/Opera/opera-*.js
-/Opera/core/*
-/Opera/modules/*
-/Opera/vendor/*
-!/Opera/includes/*
-/XPI/data/*
-!/XPI/data/images
-!/XPI/lib/main.js
-!/lib/*
-!browsersupport-*.js
-/OperaBlink/browsersupport-chrome.js
+/dist/
 
 /tests/selenium/opera-profile/
 /tests/selenium/opera-profile-patch/
@@ -56,14 +21,28 @@ dist/
 .DS_Store
 .AppleDouble
 .LSOverride
+
+# Icon must end with two \r
 Icon
+
 
 # Thumbnails
 ._*
 
-# Files that might appear on external disk
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
 .Spotlight-V100
+.TemporaryItems
 .Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
 
 ## Windows
 # Windows image file caches
@@ -76,47 +55,15 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
-## Visual Studio
-*_i.c
-*_p.c
-*.ilk
-*.meta
-*.obj
-*.pch
-*.pdb
-*.pgc
-*.pgd
-*.rsp
-*.sbr
-*.tlb
-*.tli
-*.tlh
-*.tmp
-*.tmp_proj
-*.log
-*.vspscc
-*.vssscc
-.builds
-*.pidb
-*.log
-*.scc
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
 
-/IE/[Dd]ebug/
-/IE/[Rr]elease/
-/IE/[Bb]in/
-/IE/[Oo]bj/
+# Windows shortcuts
+*.lnk
 
-# User-specific files
-*.suo
-*.user
-*.sln.docstates
-
-# Visual C++ cache files
-/IE/ipch/
-*.aps
-*.ncb
-*.opensdf
-*.sdf
-*.cachefile
-
+## IntelliJ
 .idea
+*.iml

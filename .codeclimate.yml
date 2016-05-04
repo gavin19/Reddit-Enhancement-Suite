@@ -1,0 +1,20 @@
+engines:
+  eslint:
+    enabled: true
+  scss-lint:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+  fixme:
+    enabled: true
+
+ratings:
+  paths:
+  - "**.js"
+  - "**.scss"
+
+exclude_paths:
+- "lib/vendor/*"

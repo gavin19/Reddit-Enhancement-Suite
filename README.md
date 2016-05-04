@@ -1,10 +1,13 @@
 # Reddit Enhancement Suite
 
-[![Build Status](https://travis-ci.org/honestbleeps/Reddit-Enhancement-Suite.svg?branch=master)](https://travis-ci.org/honestbleeps/Reddit-Enhancement-Suite)
+[![Travis Build Status](https://travis-ci.org/honestbleeps/Reddit-Enhancement-Suite.svg?branch=master)](https://travis-ci.org/honestbleeps/Reddit-Enhancement-Suite)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/honestbleeps/Reddit-Enhancement-Suite?branch=master&svg=true)](https://ci.appveyor.com/project/honestbleeps/Reddit-Enhancement-Suite)
+[![Coverage Status](https://coveralls.io/repos/github/honestbleeps/Reddit-Enhancement-Suite/badge.svg?branch=master)](https://coveralls.io/github/honestbleeps/Reddit-Enhancement-Suite?branch=master)
 [![Code Climate](https://codeclimate.com/github/honestbleeps/Reddit-Enhancement-Suite/badges/gpa.svg)](https://codeclimate.com/github/honestbleeps/Reddit-Enhancement-Suite)
 [![devDependency Status](https://david-dm.org/honestbleeps/Reddit-Enhancement-Suite/dev-status.svg)](https://david-dm.org/honestbleeps/Reddit-Enhancement-Suite#info=devDependencies)
+[![Chat on IRC](https://img.shields.io/badge/irc-%23enhancement-blue.svg)](http://webchat.snoonet.org/#enhancement)
 
-Reddit Enhancement Suite (RES) is a suite of modules that enhance your Reddit browsing experience.
+Reddit Enhancement Suite (RES) is a suite of modules that enhances your Reddit browsing experience.
 
 For general documentation, visit the [Reddit Enhancement Suite Wiki](https://www.reddit.com/r/Enhancement/wiki/index).
 
@@ -31,171 +34,135 @@ Thinking about contributing to RES? Awesome! We just ask that you follow a few s
 
 2. There are a few features we have made a conscious choice not to add to RES, so make sure whatever you'd like to contribute [isn't on that list](https://www.reddit.com/r/Enhancement/wiki/rejectedfeaturerequests).
 
-3. It would be greatly appreciated if you could stick to a few style guidelines. Some of these guidelines are NOT (yet!) strictly followed by RES because it originally started as an amalgamation of code from so many different sources. That said, we do hope to clean it up in due time...  Some guidelines:
+3. It would be greatly appreciated if you could stick to a few style guidelines:
 
   - please use tabs for indentation
   - please use spaces in your `if` statements, e.g. `if (foo === bar)`, not `if(foo===bar)`
   - please use single quotes `'` and not double quotes `"` for strings
   - please comment your code!
-  - please, when possible, place `var` declarations all together at the top of a function
-  - please consider installing a tool like [JSHint](http://www.jshint.com/) or [JSLint](http://www.jslint.com/) that will help enforce good JavaScript best practices!
+  - please consider using `npm run lint` ([see below](#details-and-advanced-usage)) to verify your code style
 
-4. If you decide to add support for another media hosting site to RES, please be sure that they support [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing). This way, the sites do not need to be added as additional permissions, which has caused [headaches in the past](https://www.reddit.com/r/Enhancement/comments/1jskcm/announcement_chrome_users_did_your_res_turn_off/).
-
+4. If you're adding new modules or hosts, [see below](#adding-new-files).
 
 ## Project structure
 
-In order to build the extension, the files from `lib/` must be replicated (either via hard-links or grunt, [see below](#building-development-versions-of-the-extension)) into the relevant browser directory.
+##### Top level files and folders
 
-##### Top level files & folders
-
-  - `README.md` – YOU ARE HERE, unless you're browsing on GitHub
-  - `changelog.txt` – self-explanatory
-  - `makelinks.sh` – script to generate hard links
-  - `Gruntfile.js`, `package.json` – used for alternative build scripts
-  - `lib/` – all RES code
-  - `lib/core/` – core RES code
-  - `lib/modules/` – RES modules
-  - `lib/vendor/` – RES vendor libraries
-  - `Chrome/` – Chrome-specific RES files
-  - `Opera/` – Opera-specific RES files
-  - `OperaBlink/` – Opera Blink (new Opera)-specific RES files
-  - `RES.safariextension/` – Safari-specific RES files
-  - `XPI/` – Firefox-specific RES files
-  - `tests/` – RES tests, currently unused
+  - `README.md`: YOU ARE HERE, unless you're browsing on GitHub
+  - `changelog.txt`: self-explanatory
+  - `gulpfile.babel.js`: build script
+  - `package.json`: package info, dependencies
+  - `lib/`: all RES code
+  - `lib/core/`: core RES code
+  - `lib/modules/`: RES modules
+  - `lib/vendor/`: RES vendor libraries
+  - `chrome/`: Chrome-specific RES files
+  - `firefox/`: Firefox-specific RES files
+  - `safari/`: Safari-specific RES files
+  - `dist/`: build output
+  - `**/__tests__`: unit tests
 
 ##### Chrome files
 
-  - `background.js` – the "background page" for RES, necessary for Chrome extensions
-  - `manifest.json` – the project manifest
-  - `icon.png`, `icon48.png`, `icon128.png` – icons!
+  - `background.js`: the "background page" for RES, necessary for Chrome extensions
+  - `manifest.json`: the project manifest
+  - `icon.png`, `icon48.png`, `icon128.png`: icons!
 
-##### Opera files
+##### Firefox files
 
-  - `index.html` – the "background page" for RES, necessary for Opera extensions
-  - `config.xml` – Opera's equivalent of Chrome's `manifest.json`
-  - `logo.gif` – a logo gif!
+  - `index.js`: this is Firefox's sort of "background page" for RES, like what Chrome has, but just a JS file
+  - `package.json`: the project manifest for the Firefox add-on
 
-##### Safari files (RES.safariextension)
-NOTE: This directory must have `.safariextension` in the name, or Safari's extension builder pukes.
+##### Safari files
 
-  - `background-safari.html` – the "background page" for RES, necessary for Safari extensions
-  - `Info.plist` – the project manifest
-  - `icon.png`, `icon48.png`, `icon128.png` – icons!
-
-##### Firefox files (XPI)
-NOTE: An XPI is a Firefox add-on, which is compiled using the [Add-on SDK](https://developer.mozilla.org/en-US/Add-ons/SDK).
-
-  - `lib/main.js` – this is Firefox's sort of "background page" for RES, like what Chrome has, but just a JS file
-  - `package.json` – the project manifest for the Firefox add-on
-
-##### OperaBlink files
-
-  - `background.js` – the "background page" for RES, necessary for Opera extensions
-  - `manifest.json` – the project manifest
-  - `icon.png`, `icon48.png`, `icon128.png` – icons!
+  - `background-safari.html`: the "background page" for RES, necessary for Safari extensions
+  - `Info.plist`: the project manifest
+  - `icon.png`, `icon48.png`, `icon128.png`: icons!
 
 ## Building development versions of the extension
 
-In order to build a development version of RES, run `makelinks.sh` to generate hard links into `lib/` from the browser-specific folders. (This is [necessary on Chrome](https://code.google.com/p/chromium/issues/detail?id=27185).) NOTE: switching branches will break hard links, so you will need to rerun `makelinks.sh` whenever you check out new code.
+First time installation:
 
-An alternative grunt build script is also provided; see ["Using grunt instead of hard links"](#using-grunt-instead-of-hard-links) for more details.
+1. Install [node.js](http://nodejs.org) (version 4+).
+1. Install [Python 2](https://www.python.org/downloads/) (*not* version 3).
+1. Navigate to your RES folder.
+1. Run `npm install`.
 
-[You can also use Gulp to build RES](#using-gulp-for-building-res)
+Once done, you can build the extension by running `npm start`. This will also start a watch task that will rebuild RES when you make changes (see [Advanced Usage](#details-and-advanced-usage) for more details).
 
-#### Accessing Nightly Builds
+To load the extension into your browser, see [the sections below](#building-in-chrome).
 
-In addition to building your own version of RES, you can download older (or current) builds of RES for testing purposes.
+#### Details and advanced usage
 
-(Almost) every commit to master is quickly archived away at http://allthefoxes.me - If you would like access to this database, please contact [/u/allthefoxes on reddit](http://reddit.com/u/allthefoxes) or email [fox@allthefoxes.me](mailto:fox@allthefoxes.me)
+JavaScript files in `lib/` (except `lib/vendor/`) will be compiled with [Babel](https://babeljs.io/).
 
-All that is asked is that you have at least one previous contribution to RES.
+Sass (`.scss`) files in `lib/` will be compiled with [Sass](http://sass-lang.com/) and post-processed with [Autoprefixer](https://github.com/postcss/autoprefixer).
+
+**`npm start [-- <browsers>]`** will clean `dist/`, then build RES (dev mode), and start a watch task that will rebuild RES when you make changes. Only changed files will be rebuilt.
+
+**`npm run once [-- <browsers>]`** will clean `dist/`, then build RES (dev mode) a single time.
+
+**`npm run build [-- <browsers>]`** will clean `dist/`, then build RES (release mode). Each build output will be compressed to a .zip file in `dist/zip/`.
+
+`<browsers>` is a comma-separated list of browsers to target, e.g. `chrome,firefox,safari,node`. By default, all will be targeted.
+
+**`npm run add-module -- module.js`** will add `module.js`, a new module, to the manifest for each browser.
+
+**`npm run add-host -- hostname.js`** will add `hostname.js`, a new media host, to the manifest for each browser.
+
+**`npm run lint`** will verify the code style (and point out any errors) of all `.js` files in `lib/` (except `lib/vendor/`) using [ESLint](http://eslint.org/), as well as all `.scss` files with [scss-lint](https://github.com/brigade/scss-lint).
+
+Note: You will need to install [Ruby](https://www.ruby-lang.org/) and run `npm run external-deps` before using `npm run lint`.
+
+**`npm test`** will run unit tests (in `__tests__` directories).
 
 ##### Building in Chrome
 
   1. Go to `Menu->Tools->Extensions` and tick the `Developer Mode` checkbox
-  2. Choose `Load unpacked extension` and point it to the `Chrome` folder. Make sure you only have one RES version running at a time.
+  2. Choose `Load unpacked extension` and point it to the `dist/chrome` folder. Make sure you only have one RES version running at a time.
   3. Any time you make changes to the script, you must go back to the `Menu->Tools->Extensions` page and `Reload` the extension.
 
 ##### Building in Firefox
 
-  1. [Download the Add-on SDK](https://ftp.mozilla.org/pub/mozilla.org/labs/jetpack/jetpack-sdk-latest.zip).
-  2. Start a terminal and source the Python script so that you can run the `cfx` commands. In Unix this is usually `. bin/activate` or `source bin/activate` and in Windows this usually involves running `bin/activate.bat`. If you are not using Python 2, run `virtualenv --python=python2 .` and try again.
-  3. In the terminal, `cd` to the `XPI` folder and run the command `cfx run`, which should launch a new Firefox browser using a temporary profile with only RES installed.
+  1. Install [jpm](https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/jpm) using `npm`: `npm install -g jpm`
+  2. Navigate to `dist/firefox` and run the command `jpm run`, which should launch a new Firefox browser using a temporary profile with only RES installed.
 
 ##### Building in Safari (assumes Mac)
 
-  1. Open the `Preferences` by going to `Safari->Preferences` or pressing `⌘`, then go to `Advanced` and check the checkbox for `Show develop menu in menu bar`.
-  2. Navigate to `Develop->Show Extension Builder` to open the extensions menu. Add a new extension by pressing the `+` in the bottom left and choosing `Add extension`.
-  3. Navigate to the `RES.safariextension` folder for RES and select it.
-  4. It will likely say you cannot install it because no Safari development certificate exists. You will need to visit the [Safari Dev Center](https://developer.apple.com/devcenter/safari/index.action) and create an account (right hand side).
-  5. You then need to visit the [Safari Developer Program](https://developer.apple.com/programs/safari/) site and sign up for a FREE account.
-  6. You can then visit your member page and use the certificate utility to create a new Safari Developer Certificate. Follow the instructions to install the certificate. If you have an error involving it being signed by an unknown authority, then double click the certificate and under the `Trust` setting choose `Always Trust`. You should then be able to install the extension from the `Extension Builder` menu.
+  1. Open the `Preferences` by going to `Safari->Preferences` or pressing `⌘,`, then go to `Advanced` and check the checkbox for `Show Develop menu in menu bar`.
+  2. Navigate to `Develop->Show Extension Builder` to open the extensions builder. Add a new extension by pressing the `+` in the bottom left and choosing `Add Extension`.
+  3. Navigate to the `dist/RES.safariextension` folder for RES and select it.
+  4. If you are using Safari 9+, you should be able to install the extension without enrolling in the [Apple Developer Program](https://developer.apple.com/programs/); however, the extension will be auto-uninstalled when you quit Safari.
 
-##### Building in Opera
+  If you use an older version of Safari or find the auto-uninstall annoying, you need to purchase a proper certificate by signing up for the [Apple Developer Program](https://developer.apple.com/programs/) (currently $99/yr).
 
-  1. Click `Tools->Extensions->Manage Extensions`
-  2. Drag the `config.xml` file in the `Opera` directory in to the extensions window and release. You should now have installed the extension.
+#### Accessing nightly builds
 
-The above steps will fail if the `makelinks.sh` or grunt build scripts have not been run before hand. Please ensure you only have one copy of RES running at a time.
+In addition to building your own version of RES, you can download older (or current) builds of RES for testing purposes.
 
-### Using grunt instead of hard links
+(Almost) every commit to master is quickly archived away at http://allthefoxes.me; if you would like access to this database, please contact [/u/allthefoxes on reddit](https://www.reddit.com/u/allthefoxes) or email [fox@allthefoxes.me](mailto:fox@allthefoxes.me).
 
-RES can also be built using [grunt](http://gruntjs.com/). In order to use grunt, you will need to have [node.js](http://nodejs.org/) installed on your system.
+All that is asked is that you have at least one previous contribution to RES.
 
-If you have never used grunt before:
+## Adding new files
 
-1. Run `npm install -g grunt-cli` to install the grunt task runner.
-2. Navigate to the RES directory in a console and run `npm install` to install all other dependencies.
+##### Modules
 
-Once done, you can build the extension by running `grunt`.
+See [`lib/modules/example.js`](https://github.com/honestbleeps/Reddit-Enhancement-Suite/blob/master/lib/modules/example.js) for an example.
 
-For developing, run `grunt` followed by the name of the browser you wish to develop on, such as `grunt chrome` for Chrome or `grunt firefox` for Firefox. Once run, grunt will start a watch task which will instantly copy any changes made in the `lib/` directory over to the given browser's extension folder. You will need to stop and start grunt if you add any additional files.
+Create a new `.js` file in `lib/modules`. Use [`npm run add-module`](#details-and-advanced-usage) to add the file to the browsers' manifests.
 
-To load the extension into your browser, see the ["Building development versions of the extension" section](#building-development-versions-of-the-extension) above.
+##### Inline image viewer hosts
 
-### Using Gulp for building RES
+Please be sure that they support [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) so the sites do not need to be added as additional permissions, which has caused [headaches in the past](https://www.reddit.com/r/Enhancement/comments/1jskcm/announcement_chrome_users_did_your_res_turn_off/).
 
-RES can also be built with [gulp](http://gulpjs.com/), an advanced build manager similar to grunt.
+See [`lib/modules/hosts/example.js`](https://github.com/honestbleeps/Reddit-Enhancement-Suite/blob/master/lib/modules/hosts/example.js) for an example.
 
-You will need [node.js](http://nodejs.org) installed on your system.
+Create a new `.js` file in `lib/modules/hosts`. Use [`npm run add-host`](#details-and-advanced-usage) to add the file to the browsers' manifests.
 
-First time use:
+##### Stylesheets
 
-1. Run `npm install -g gulp`.
-2. Navigate to your RES folder.
-3. Run `npm install` ^(If you're super-conscientious about which modules are installed, then look at gulpfile.js and `npm install` the required packages manually.)
+Create a new Sass partial under `lib/css/` (with a leading underscore, e.g. `_myPartial.scss`). Import the file in `lib/css/res.scss` (i.e. `@import 'modules/myPartial';`—do not include the underscore or file extension). You do not need to add it to any browser manifests.
 
-Usage:
-
-    gulp
-
-by itself will build all current browser versions of RES and will place them into a new folder called dist. If the dist directory already exists, it will clear out anything inside it.
-
-    gulp clean
-
-cleans out the `dist/` directory
-
-    gulp <tasks> -b browser1 -b browser2
-
-can be used with any of the following tasks to specify individual browsers (chrome, firefox, safari, opera, or oblink), instead of performing the task(s) for all of them.
-
-    gulp build
-
-builds RES, copying the resultant files into the `dist/` directory. It is recommended to run `gulp clean` first.
-
-    gulp add-module --file module.js
-
-adds module.js, a new module, to the manifest for each browser.
-
-	gulp add-host --file hostname.js
-
-adds hostname.js, a new media host, to the manifest for each browser.
-
-    gulp watch
-
-rebuilds the extension when anything changes.
-
-    gulp zip --zipdir /path/to/zip/directory
-
-compresses the build folders in `dist/` into .zip files. If no `--zipdir` is specified, the .zip files will be placed in `dist/zip/`. You must run `gulp build` first, otherwise there will be no files to zip.
+Body classes will be automatically added for boolean and enum options with the property `bodyClass: true`, in the form `.res-moduleId-optionKey` for boolean options (only when they're enabled), and `.res-moduleId-optionKey-optionValue` for enums.
+This is the preferred way to create optional CSS; do not use `addCSS()` unless absolutely necessary (i.e. variable color, size, etc.).
